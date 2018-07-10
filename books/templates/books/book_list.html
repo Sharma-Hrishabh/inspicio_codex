@@ -1,0 +1,17 @@
+{% extends 'base_layout.html' %}
+{% block content %}
+    <h2 style="text-align:center;margin:20px">Books List</h2>
+    <div class="books">
+      <hr>
+    {% for book in items %}
+
+       <h3 style="margin:10px"><a href="./{{book.slug}}">{{book.title}}</a></h3>
+       
+       <p>{{book.year}}</p>
+       <p>{{book.author}}</p>
+    {% endfor %}
+   </div>
+
+{% include 'books/pagination.html' %}
+
+{% endblock %}
