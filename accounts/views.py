@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth import login,logout
 from django.http import HttpResponse
+
+
 def signup_view(request):
     if request.method=='POST':
         form = UserCreationForm(request.POST)
@@ -10,7 +12,9 @@ def signup_view(request):
             login(request,user)
             return HttpResponse('loginned after signup')
     else:
-        form = UserCreationForm
+        user = request.user
+        profile = user.profile
+        form = UserCreationForm(instance=profile)
     return render(request,'accounts/signup.html',{'form':form})
 
 
