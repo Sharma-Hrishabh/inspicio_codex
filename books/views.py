@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from .models import Book
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from books.config import pagination
 from .scrap import get_rating
 def book_list(request):
@@ -26,3 +27,22 @@ def book_detail(request,slug):
 
     }
     return render(request,'books/book_detail.html',detail)
+
+
+def search(request):
+    template='books/book_list.html'
+    query=request.GET.get('q')
+    #Q for encapsulating query
+    if query:
+        results=Book.objects.filter(Q(title__icontains=query))
+    else:
+        results=books=Book.objects.all().order_by('year')
+
+    pages=pagination(request,results,num=2)
+
+    context={'items':pages[0],
+          'page_range':pages[1],
+          'query':query
+          }
+
+    return render(request,template,context)
